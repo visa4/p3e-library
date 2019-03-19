@@ -1,5 +1,5 @@
 module.exports = {
     core : {
-        Application:  require('./commonjs/core/Application')
+        Application: require('./commonjs/core/Application').Application
     }
 };

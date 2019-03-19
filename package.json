@@ -1,0 +1,27 @@
+{
+  "name": "@p3e/library",
+  "version": "0.1.0",
+  "description": "P3e library",
+  "main": "index.js",
+  "devDependencies": {
+    "typescript": "^3.3.3333"
+  },
+  "scripts": {
+    "tsc-commonjs": "tsc  -p commonjs",
+    "tsc-es6": "tsc  -p es6",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/visa4/p3e-library.git"
+  },
+  "author": "antonino.visalli@gmail.com",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/visa4/p3e-library/issues"
+  },
+  "homepage": "https://github.com/visa4/p3e-library#readme",
+  "dependencies": {
+    "@types/node": "^11.11.3"
+  }
+}

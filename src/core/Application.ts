@@ -1,5 +1,5 @@
 import {ContainerInterface, ContainerAwareInterface} from "../container/index";
-import {Module} from "./Module";
+import {Module} from "./module/index";
 import {EventManagerAwareInterface, EventManagerInterface} from "../event/index";
 import {EventManager} from "../event/EventManager";
 

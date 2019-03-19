@@ -8,7 +8,7 @@
   },
   "scripts": {
     "tsc-commonjs": "tsc  -p commonjs",
-    "tsc-es6": "tsc  -p es6",
+    "tsc-es6": "tsc  -p .",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {

@@ -2,6 +2,7 @@ import {ContainerInterface, ContainerAwareInterface} from "../container/index";
 import {Module} from "./module/index";
 import {EventManagerAwareInterface, EventManagerInterface} from "../event/index";
 import {EventManager} from "../event/EventManager";
+import * as pathd from "path";
 
 /**
  *  Application
@@ -49,6 +50,11 @@ export class Application implements EventManagerAwareInterface {
     private eventManager:EventManagerInterface = new EventManager();
 
     /**
+     * @type {path}
+     */
+    private path: any = require('path');
+
+    /**
      * @param {Array<Module>} modules
      * @param {ContainerInterface} container
      */
@@ -58,21 +64,24 @@ export class Application implements EventManagerAwareInterface {
             this.modules.push(modules[cont]);
         }
         this.getEventManager().emit(Application.BOOTSTRAP_MODULE, modules);
+        let l = require('path');
+        l.no
     }
 
     /**
      * @param {Module} module
      */
-    private loadModule(module:Module, container:ContainerInterface) {
+    public loadModule(module:Module, container:ContainerInterface) {
 
         /**
-         * to run absolute path on windows, for polymer cli script c:/ !== /c:/
+         * to run absolute path on windows, for polymer cli script c:/ !== /c:/ when use import
          */
         let modulePath = this.getModulePath();
         modulePath = modulePath.charAt(0) !== '/' ? `/${modulePath}`: modulePath;
 
         let configModule;
         let configModuleClass;
+        let autoloadRequire;
 
         /**
          * Load entry point module
@@ -81,7 +90,7 @@ export class Application implements EventManagerAwareInterface {
 
             let wcEntryPoint = `${modulePath}${module.getName()}${this.getSlash()}${module.getWebComponentEntryPointNameFile()}`;
             import(wcEntryPoint)
-                .then((module) => {
+                .then((moduleLoaded) => {
                     console.log("Load entry point module:", module.getWebComponentEntryPointName(), module);
 
                 })
@@ -90,13 +99,25 @@ export class Application implements EventManagerAwareInterface {
                 });
         }
 
+        if (module.getAutoloads().length > 0) {
+
+            for (let cont = 0; module.getAutoloads().length > cont; cont++) {
+
+                autoloadRequire  = require(`${this.getModulePath()}${module.getName()}${this.getSlash()}${this.path.normalize(module.getAutoloads()[cont])}`);
+                window[autoloadRequire.name] = autoloadRequire;
+            }
+        }
+
         if (module.getConfigEntryPoint()) {
-            let configModulePath = `${modulePath}${module.getName()}${this.getSlash()}${module.getConfigEntryPoint()}`;
+            let configModulePath = `${this.getModulePath()}${module.getName()}${this.getSlash()}${this.path.normalize(module.getConfigEntryPoint())}`;
 
 
             configModule  = require(configModulePath);
-            configModuleClass = new configModule.Config();
+            configModuleClass = new configModule();
             configModuleClass.setContainer(container);
+            /**
+             * Init module
+             */
             configModuleClass.init();
         }
     }

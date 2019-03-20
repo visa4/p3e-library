@@ -126,5 +126,16 @@ class Module {
         this.configEntryPoint = configEntryPoint;
         return this;
     }
+    /**
+     * @return {Array<string>}
+     */
+    getAutoloads() {
+        return this.autoloads;
+    }
+    /**
+     */
+    setAutoloads(value) {
+        this.autoloads = value;
+    }
 }
 exports.Module = Module;

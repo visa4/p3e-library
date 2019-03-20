@@ -143,4 +143,17 @@ export class Module {
         this.configEntryPoint = configEntryPoint;
         return this;
     }
+
+    /**
+     * @return {Array<string>}
+     */
+    public getAutoloads() {
+        return this.autoloads;
+    }
+
+    /**
+     */
+    public setAutoloads(value: Array<string>) {
+        this.autoloads = value;
+    }
 }

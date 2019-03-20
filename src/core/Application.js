@@ -12,6 +12,10 @@ export class Application {
          * @type {EventManager}
          */
         this.eventManager = new EventManager();
+        /**
+         * @type {path}
+         */
+        this.path = require('path');
     }
     /**
      * @param {Array<Module>} modules
@@ -23,36 +27,48 @@ export class Application {
             this.modules.push(modules[cont]);
         }
         this.getEventManager().emit(Application.BOOTSTRAP_MODULE, modules);
+        let l = require('path');
+        l.no;
     }
     /**
      * @param {Module} module
      */
     loadModule(module, container) {
         /**
-         * to run absolute path on windows, for polymer cli script c:/ !== /c:/
+         * to run absolute path on windows, for polymer cli script c:/ !== /c:/ when use import
          */
         let modulePath = this.getModulePath();
         modulePath = modulePath.charAt(0) !== '/' ? `/${modulePath}` : modulePath;
         let configModule;
         let configModuleClass;
+        let autoloadRequire;
         /**
          * Load entry point module
          */
         if (module.getWebComponentEntryPointName() && customElements && customElements.get(module.getWebComponentEntryPointName()) === undefined) {
             let wcEntryPoint = `${modulePath}${module.getName()}${this.getSlash()}${module.getWebComponentEntryPointNameFile()}`;
             import(wcEntryPoint)
-                .then((module) => {
+                .then((moduleLoaded) => {
                 console.log("Load entry point module:", module.getWebComponentEntryPointName(), module);
             })
                 .catch((err) => {
                 console.log("Failed to load entry point module:", err);
             });
         }
+        if (module.getAutoloads().length > 0) {
+            for (let cont = 0; module.getAutoloads().length > cont; cont++) {
+                autoloadRequire = require(`${this.getModulePath()}${module.getName()}${this.getSlash()}${this.path.normalize(module.getAutoloads()[cont])}`);
+                window[autoloadRequire.name] = autoloadRequire;
+            }
+        }
         if (module.getConfigEntryPoint()) {
-            let configModulePath = `${modulePath}${module.getName()}${this.getSlash()}${module.getConfigEntryPoint()}`;
+            let configModulePath = `${this.getModulePath()}${module.getName()}${this.getSlash()}${this.path.normalize(module.getConfigEntryPoint())}`;
             configModule = require(configModulePath);
-            configModuleClass = new configModule.Config();
+            configModuleClass = new configModule();
             configModuleClass.setContainer(container);
+            /**
+             * Init module
+             */
             configModuleClass.init();
         }
     }

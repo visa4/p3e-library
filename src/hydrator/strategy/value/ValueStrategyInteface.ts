@@ -5,11 +5,13 @@ export interface ValueStrategyInteface {
 
     /**
      * @param property
+     * @param data
      */
-    hydrateProperty(property:any);
+    hydrateValue(property:string, data:any);
 
     /**
      * @param property
+     * @param data
      */
-    extractProperty(property:any);
+    extractValue(property:string, data:any);
 }

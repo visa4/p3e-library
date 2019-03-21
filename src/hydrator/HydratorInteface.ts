@@ -3,4 +3,4 @@ import {ExtractionInteface} from "./ExtractionInteface";
 /**
  *
  */
-export interface HydratorInteface extends HydrationInteface, ExtractionInteface { }
+export interface HydratorInteface extends ExtractionInteface, HydrationInteface { }

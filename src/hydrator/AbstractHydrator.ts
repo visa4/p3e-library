@@ -37,22 +37,22 @@ export abstract class AbstractHydrator implements HydratorInteface {
      * @param {object} valueStrategies
      * @param {object} propertyStrategies
      */
-    constructor(templateObjectHydration:object = {}, valueStrategies:object = {}, propertyStrategies:object = {}) {
+    constructor(templateObjectHydration?:object, valueStrategies?:object, propertyStrategies?:object) {
 
         /**
          * @type {object}
          */
-        this.templateObjectHydration = templateObjectHydration;
+        this.templateObjectHydration = templateObjectHydration ? templateObjectHydration : null;
 
         /**
          * @type {object}
          */
-        this.valueStrategies = valueStrategies;
+        this.valueStrategies = valueStrategies ? valueStrategies : {};
 
         /**
          * @type {object}
          */
-        this.propertyStrategies = propertyStrategies;
+        this.propertyStrategies = propertyStrategies ? propertyStrategies : {};
     }
 
     /**
@@ -181,7 +181,7 @@ export abstract class AbstractHydrator implements HydratorInteface {
      * @return {string}
      */
     protected hydrateValue(name:string, data: any) {
-        let hydrateProperty = name;
+        let hydrateProperty = data;
         if (this.hasValueStrategy(name)) {
             hydrateProperty = this.getValueStrategy(name).hydrateValue(name, data);
         }
@@ -195,7 +195,7 @@ export abstract class AbstractHydrator implements HydratorInteface {
     protected extractProperty(name:string) {
         let extractProperty = name;
         if (this.hasPropertytrategy(name)) {
-            extractProperty = this.getValueStrategy(name).extractProperty(name)
+            extractProperty = this.getPropertyStrategy(name).extractProperty(name)
         }
         return extractProperty;
     }

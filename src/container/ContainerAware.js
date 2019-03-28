@@ -24,3 +24,4 @@ export class ContainerAware {
         return this;
     }
 }
+//# sourceMappingURL=ContainerAware.js.map

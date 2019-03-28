@@ -24,3 +24,4 @@ export class EventManagerAware {
         return this.eventManager;
     }
 }
+//# sourceMappingURL=EventManagerAware.js.map

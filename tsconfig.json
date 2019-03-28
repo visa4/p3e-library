@@ -1,8 +1,10 @@
 {
   "compilerOptions": {
     "esModuleInterop" : true,
+    "allowSyntheticDefaultImports": true,
+    "sourceMap": true,
     "module": "esnext",
-    "target": "es6",
+    "target": "es2018",
     "moduleResolution": "node",
     "outDir": "src",
     "rootDir" : "src",

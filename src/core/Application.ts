@@ -4,6 +4,7 @@ import {EventManagerAwareInterface, EventManagerInterface} from "../event/index"
 import {EventManager} from "../event/EventManager";
 import * as pathd from "path";
 
+
 /**
  *  Application
  */
@@ -59,19 +60,27 @@ export class Application implements EventManagerAwareInterface {
      * @param {ContainerInterface} container
      */
     public loadModules(modules:Array<Module>, container:ContainerInterface) {
+
+        let promises = [];
         for (let cont = 0; modules.length > cont; cont++) {
-            this.loadModule(modules[cont], container);
-            this.modules.push(modules[cont]);
+            promises.push(this._loadModule(modules[cont], container));
         }
-        this.getEventManager().emit(Application.BOOTSTRAP_MODULE, modules);
-        let l = require('path');
-        l.no
+
+        Promise.all(promises).then(
+            (modules) => {
+                this.modules= modules;
+                this.getEventManager().emit(Application.BOOTSTRAP_MODULE, modules);
+        });
+
     }
 
     /**
      * @param {Module} module
+     * @param {ContainerInterface} container
+     * @return {Promise<Module>}
+     * @private
      */
-    public loadModule(module:Module, container:ContainerInterface) {
+    private async _loadModule(module:Module, container:ContainerInterface) {
 
         /**
          * to run absolute path on windows, for polymer cli script c:/ !== /c:/ when use import
@@ -89,7 +98,7 @@ export class Application implements EventManagerAwareInterface {
         if (module.getWebComponentEntryPointName() && customElements && customElements.get(module.getWebComponentEntryPointName()) === undefined) {
 
             let wcEntryPoint = `${modulePath}${module.getName()}${this.getSlash()}${module.getWebComponentEntryPointNameFile()}`;
-            import(wcEntryPoint)
+            await import(wcEntryPoint)
                 .then((moduleLoaded) => {
                     console.log("Load entry point module:", module.getWebComponentEntryPointName(), module);
 
@@ -118,8 +127,10 @@ export class Application implements EventManagerAwareInterface {
             /**
              * Init module
              */
-            configModuleClass.init();
+            await configModuleClass.init();
         }
+
+        return module;
     }
 
     /**
@@ -174,16 +185,7 @@ export class Application implements EventManagerAwareInterface {
      * @return {string}
      */
     public getSlash() {
-        return this.slash;
-    }
-
-    /**
-     * @param {string} slash
-     * @return {Application}
-     */
-    public setSlash(slash: string) {
-        this.slash = slash;
-        return this;
+        return this.path.sep;
     }
 
     /**
@@ -212,13 +214,6 @@ export class Application implements EventManagerAwareInterface {
             }
         }
         return this;
-    }
-
-    /**
-     * @param {ContainerInterface} container
-     */
-    public static injectService(container:ContainerInterface) {
-        console.log('inject');
     }
 
     /**

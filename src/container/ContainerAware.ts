@@ -9,7 +9,7 @@ export class ContainerAware implements ContainerAwareInterface {
     /**
      * @type {Container}
      */
-    private container: ContainerInterface = new Container();
+    protected container: ContainerInterface = new Container();
 
     /**
      * @return ContainerInterface

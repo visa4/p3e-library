@@ -1,17 +1,8 @@
+import {ValueHydrationStrategyInterface} from "./ValueHydrationStrategyInterface";
+import {ValueExtractStrategyInterface} from "./ValueExtractStrategyInterface";
 /**
  *
  */
-export interface ValueStrategyInteface {
+export interface ValueStrategyInteface extends ValueExtractStrategyInterface, ValueHydrationStrategyInterface {
 
-    /**
-     * @param property
-     * @param data
-     */
-    hydrateValue(property:string, data:any);
-
-    /**
-     * @param property
-     * @param data
-     */
-    extractValue(property:string, data:any);
 }

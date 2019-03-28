@@ -4,8 +4,8 @@
 export interface HydrationInteface {
 
     /**
-     * @param {object} data
+     * @param data
      * @param {object} object
      */
-    hydrate(data:object, object?:object);
+    hydrate(data: any, object?: object);
 }

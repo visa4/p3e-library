@@ -1,4 +1,12 @@
 "use strict";
+var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
+    return new (P || (P = Promise))(function (resolve, reject) {
+        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
+        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
+        function step(result) { result.done ? resolve(result.value) : new P(function (resolve) { resolve(result.value); }).then(fulfilled, rejected); }
+        step((generator = generator.apply(thisArg, _arguments || [])).next());
+    });
+};
 Object.defineProperty(exports, "__esModule", { value: true });
 const EventManager_1 = require("../event/EventManager");
 /**
@@ -24,54 +32,61 @@ class Application {
      * @param {ContainerInterface} container
      */
     loadModules(modules, container) {
+        let promises = [];
         for (let cont = 0; modules.length > cont; cont++) {
-            this.loadModule(modules[cont], container);
-            this.modules.push(modules[cont]);
+            promises.push(this._loadModule(modules[cont], container));
         }
-        this.getEventManager().emit(Application.BOOTSTRAP_MODULE, modules);
-        let l = require('path');
-        l.no;
+        Promise.all(promises).then((modules) => {
+            this.modules = modules;
+            this.getEventManager().emit(Application.BOOTSTRAP_MODULE, modules);
+        });
     }
     /**
      * @param {Module} module
+     * @param {ContainerInterface} container
+     * @return {Promise<Module>}
+     * @private
      */
-    loadModule(module, container) {
-        /**
-         * to run absolute path on windows, for polymer cli script c:/ !== /c:/ when use import
-         */
-        let modulePath = this.getModulePath();
-        modulePath = modulePath.charAt(0) !== '/' ? `/${modulePath}` : modulePath;
-        let configModule;
-        let configModuleClass;
-        let autoloadRequire;
-        /**
-         * Load entry point module
-         */
-        if (module.getWebComponentEntryPointName() && customElements && customElements.get(module.getWebComponentEntryPointName()) === undefined) {
-            let wcEntryPoint = `${modulePath}${module.getName()}${this.getSlash()}${module.getWebComponentEntryPointNameFile()}`;
-            Promise.resolve().then(() => require(wcEntryPoint)).then((moduleLoaded) => {
-                console.log("Load entry point module:", module.getWebComponentEntryPointName(), module);
-            })
-                .catch((err) => {
-                console.log("Failed to load entry point module:", err);
-            });
-        }
-        if (module.getAutoloads().length > 0) {
-            for (let cont = 0; module.getAutoloads().length > cont; cont++) {
-                autoloadRequire = require(`${this.getModulePath()}${module.getName()}${this.getSlash()}${this.path.normalize(module.getAutoloads()[cont])}`);
-                window[autoloadRequire.name] = autoloadRequire;
-            }
-        }
-        if (module.getConfigEntryPoint()) {
-            let configModulePath = `${this.getModulePath()}${module.getName()}${this.getSlash()}${this.path.normalize(module.getConfigEntryPoint())}`;
-            configModule = require(configModulePath);
-            configModuleClass = new configModule();
-            configModuleClass.setContainer(container);
+    _loadModule(module, container) {
+        return __awaiter(this, void 0, void 0, function* () {
             /**
-             * Init module
+             * to run absolute path on windows, for polymer cli script c:/ !== /c:/ when use import
              */
-            configModuleClass.init();
-        }
+            let modulePath = this.getModulePath();
+            modulePath = modulePath.charAt(0) !== '/' ? `/${modulePath}` : modulePath;
+            let configModule;
+            let configModuleClass;
+            let autoloadRequire;
+            /**
+             * Load entry point module
+             */
+            if (module.getWebComponentEntryPointName() && customElements && customElements.get(module.getWebComponentEntryPointName()) === undefined) {
+                let wcEntryPoint = `${modulePath}${module.getName()}${this.getSlash()}${module.getWebComponentEntryPointNameFile()}`;
+                yield Promise.resolve().then(() => require(wcEntryPoint)).then((moduleLoaded) => {
+                    console.log("Load entry point module:", module.getWebComponentEntryPointName(), module);
+                })
+                    .catch((err) => {
+                    console.log("Failed to load entry point module:", err);
+                });
+            }
+            if (module.getAutoloads().length > 0) {
+                for (let cont = 0; module.getAutoloads().length > cont; cont++) {
+                    autoloadRequire = require(`${this.getModulePath()}${module.getName()}${this.getSlash()}${this.path.normalize(module.getAutoloads()[cont])}`);
+                    window[autoloadRequire.name] = autoloadRequire;
+                }
+            }
+            if (module.getConfigEntryPoint()) {
+                let configModulePath = `${this.getModulePath()}${module.getName()}${this.getSlash()}${this.path.normalize(module.getConfigEntryPoint())}`;
+                configModule = require(configModulePath);
+                configModuleClass = new configModule();
+                configModuleClass.setContainer(container);
+                /**
+                 * Init module
+                 */
+                yield configModuleClass.init();
+            }
+            return module;
+        });
     }
     /**
      * @return {string}
@@ -119,15 +134,7 @@ class Application {
      * @return {string}
      */
     getSlash() {
-        return this.slash;
-    }
-    /**
-     * @param {string} slash
-     * @return {Application}
-     */
-    setSlash(slash) {
-        this.slash = slash;
-        return this;
+        return this.path.sep;
     }
     /**
      * @param {Module} module
@@ -153,12 +160,6 @@ class Application {
             }
         }
         return this;
-    }
-    /**
-     * @param {ContainerInterface} container
-     */
-    static injectService(container) {
-        console.log('inject');
     }
     /**
      * @param {EventManagerInterface} eventManager

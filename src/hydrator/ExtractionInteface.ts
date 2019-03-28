@@ -4,7 +4,7 @@
 export interface ExtractionInteface {
 
     /**
-     * @param {object} data
+     * @param data
      */
-    extract(data:object);
+    extract(data:any);
 }

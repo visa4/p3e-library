@@ -11,33 +11,39 @@ class Container {
         this.services = {};
     }
     /**
-     * @param {string} id
-     * @return Promise
+     * @inheritDoc
      */
     get(id) {
+        if (typeof this.services[id] === 'function') {
+            this.services[id] = this.services[id](this);
+        }
+        return this.services[id];
+    }
+    ;
+    /**
+     *
+     * @inheritDoc
+     */
+    getAsync(id) {
         return new Promise(function (resolve, reject) {
             /**
-            * Inject container if the service is a callback
-            */
+             * Inject container if the service is a callback
+             */
             if (typeof this.services[id] === 'function') {
                 this.services[id] = this.services[id](this);
             }
             resolve(this.services[id]);
         }.bind(this));
     }
-    ;
     /**
-     * @param {string} id
-     * @return boolean
+     * @inheritDoc
      */
     has(id) {
         return !!this.services[id];
     }
     ;
     /**
-     * @param {string} id
-     * @param service
-     * @return ContainerInterface
+     * @inheritDoc
      */
     set(id, service) {
         this.services[id] = service;
@@ -45,8 +51,4 @@ class Container {
     }
     ;
 }
-/**
- * @type {string}
- */
-Container.LOAD_SERVICE = 'load-service';
 exports.Container = Container;

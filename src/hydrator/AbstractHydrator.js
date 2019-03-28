@@ -1,10 +1,5 @@
 export class AbstractHydrator {
-    /**
-     * @param {object} templateObjectHydration
-     * @param {object} valueStrategies
-     * @param {object} propertyStrategies
-     */
-    constructor(templateObjectHydration, valueStrategies, propertyStrategies) {
+    constructor() {
         /**
          * @type {null}
          */
@@ -25,18 +20,6 @@ export class AbstractHydrator {
          * @type {object}
          */
         this.enablePropertyToExtract = {};
-        /**
-         * @type {object}
-         */
-        this.templateObjectHydration = templateObjectHydration;
-        /**
-         * @type {object}
-         */
-        this.valueStrategies = valueStrategies;
-        /**
-         * @type {object}
-         */
-        this.propertyStrategies = propertyStrategies;
     }
     /**
      * @param {string} name
@@ -111,6 +94,13 @@ export class AbstractHydrator {
         return obj;
     }
     /**
+     * @return {object}
+     */
+    setTemplateObjectHydration(templateObjectHydration) {
+        this.templateObjectHydration = templateObjectHydration;
+        return this;
+    }
+    /**
      * @param {string} name
      * @return {boolean}
      */
@@ -141,7 +131,7 @@ export class AbstractHydrator {
      * @return {string}
      */
     hydrateValue(name, data) {
-        let hydrateProperty = name;
+        let hydrateProperty = data;
         if (this.hasValueStrategy(name)) {
             hydrateProperty = this.getValueStrategy(name).hydrateValue(name, data);
         }
@@ -149,25 +139,42 @@ export class AbstractHydrator {
     }
     /**
      * @param name
-     * @return {any}
+     * @return {string}
      */
     extractProperty(name) {
         let extractProperty = name;
         if (this.hasPropertytrategy(name)) {
-            extractProperty = this.getValueStrategy(name).extractProperty(name);
+            extractProperty = this.getPropertyStrategy(name).extractProperty(name);
         }
         return extractProperty;
     }
     /**
      * @param {string} name
      * @param data
-     * @return {string}
+     * @return {any}
      */
     extractValue(name, data) {
-        let extractValue = name;
+        let extractValue = data;
         if (this.hasValueStrategy(name)) {
             extractValue = this.getValueStrategy(name).extractValue(name, data);
         }
         return extractValue;
     }
+    /**
+     * @param {string} name
+     * @return {this}
+     */
+    enableExtractProperty(name) {
+        this.enablePropertyToExtract[name] = true;
+        return this;
+    }
+    /**
+     * @param {string} name
+     * @return {this}
+     */
+    enableHydrateProperty(name) {
+        this.enablePropertyToHydrate[name] = true;
+        return this;
+    }
 }
+//# sourceMappingURL=AbstractHydrator.js.map

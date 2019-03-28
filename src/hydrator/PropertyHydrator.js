@@ -4,6 +4,26 @@ import { AbstractHydrator } from "./AbstractHydrator";
  */
 export class PropertyHydrator extends AbstractHydrator {
     /**
+     * @param {object} templateObjectHydration
+     * @param {object} valueStrategies
+     * @param {object} propertyStrategies
+     */
+    constructor(templateObjectHydration, valueStrategies, propertyStrategies) {
+        super();
+        /**
+         * @type {object}
+         */
+        this.templateObjectHydration = templateObjectHydration ? templateObjectHydration : null;
+        /**
+         * @type {object}
+         */
+        this.valueStrategies = valueStrategies ? valueStrategies : {};
+        /**
+         * @type {object}
+         */
+        this.propertyStrategies = propertyStrategies ? propertyStrategies : {};
+    }
+    /**
      * @param {object} data
      */
     extract(data) {
@@ -31,3 +51,4 @@ export class PropertyHydrator extends AbstractHydrator {
         return object;
     }
 }
+//# sourceMappingURL=PropertyHydrator.js.map

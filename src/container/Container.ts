@@ -4,26 +4,33 @@ import {ContainerInterface} from './ContainerInterface';
  * Container
  */
 export class Container implements ContainerInterface {
-    /**
-     * @type {string}
-     */
-    static LOAD_SERVICE: string = 'load-service';
 
     /**
      * @type {object}
      */
-    private services: object = {};
+    protected services: object = {};
 
     /**
-     * @param {string} id
-     * @return Promise
+     * @inheritDoc
      */
     get(id: string) {
 
+        if (typeof this.services[id] === 'function') {
+            this.services[id] = this.services[id](this);
+        }
+
+        return this.services[id]
+    };
+
+    /**
+     *
+     * @inheritDoc
+     */
+    getAsync(id: string): Promise<any> {
         return new Promise(function (resolve, reject) {
                 /**
-                * Inject container if the service is a callback
-                */
+                 * Inject container if the service is a callback
+                 */
                 if (typeof this.services[id] === 'function') {
                     this.services[id] = this.services[id](this);
                 }
@@ -31,20 +38,17 @@ export class Container implements ContainerInterface {
                 resolve(this.services[id]);
             }.bind(this)
         );
-    };
+    }
 
     /**
-     * @param {string} id
-     * @return boolean
+     * @inheritDoc
      */
     has(id: string) {
         return !!this.services[id];
     };
 
     /**
-     * @param {string} id
-     * @param service
-     * @return ContainerInterface
+     * @inheritDoc
      */
     set(id: string, service: any) {
         this.services[id] = service;

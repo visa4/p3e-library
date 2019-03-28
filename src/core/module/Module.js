@@ -136,3 +136,4 @@ export class Module {
         this.autoloads = value;
     }
 }
+//# sourceMappingURL=Module.js.map

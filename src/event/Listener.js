@@ -23,3 +23,4 @@ export class Listener {
         return event;
     }
 }
+//# sourceMappingURL=Listener.js.map

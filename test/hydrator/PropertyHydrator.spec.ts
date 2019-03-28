@@ -38,6 +38,7 @@ describe('PropertyHydrator', () => {
         expect(hydrator.hydrate(mockData)).to.not.equal(mockData);
 
         class Mock {
+            test:string;
             constructor()  {
                 this.test = 'testObject';
             }

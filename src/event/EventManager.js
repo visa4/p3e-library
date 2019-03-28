@@ -58,3 +58,4 @@ export class EventManager {
         return this;
     }
 }
+//# sourceMappingURL=EventManager.js.map

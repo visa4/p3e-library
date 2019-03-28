@@ -16,7 +16,32 @@ module.exports = {
         EventManager: require('./commonjs/event/EventManager').EventManager,
         Listener: require('./commonjs/event/Listener').Listener
     },
+    hydrator : {
+        AbstractHydrator: require('./commonjs/hydrator/AbstractHydrator').AbstractHydrator,
+        PropertyHydrator: require('./commonjs/hydrator/PropertyHydrator').PropertyHydrator,
+        strategy : {
+            value : {
+                HydratorStrategy : require('./commonjs/hydrator/strategy/value/HydratorStrategy').HydratorStrategy,
+            }
+        }
+    },
     localize : {
         Localize : require('./commonjs/localize/Localize').Localize
+    },
+    storage : {
+        Storage : require('./commonjs/storage/Storage').Storage,
+        adapter : {
+            dexie : {
+                DexieManager : require('./commonjs/storage/adapter/dexie/DexieManager').DexieManager,
+                DexieAdapter : require('./commonjs/storage/adapter/dexie/DexieAdapter').DexieAdapter,
+                Store : require('./commonjs/storage/adapter/dexie/Store').Store
+            },
+            localStorage: {
+                LocalStorageAdapter : require('./commonjs/storage/adapter/local-storage/LocalStorageAdapter').LocalStorageAdapter
+            }
+        },
+        entity : {
+            EntityIdentifier : require('./commonjs/storage/entity/EntityIdentifier').EntityIdentifier
+        }
     }
 };

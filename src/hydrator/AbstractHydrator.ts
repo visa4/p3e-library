@@ -33,29 +33,6 @@ export abstract class AbstractHydrator implements HydratorInteface {
     protected enablePropertyToExtract:object = {};
 
     /**
-     * @param {object} templateObjectHydration
-     * @param {object} valueStrategies
-     * @param {object} propertyStrategies
-     */
-    constructor(templateObjectHydration?:object, valueStrategies?:object, propertyStrategies?:object) {
-
-        /**
-         * @type {object}
-         */
-        this.templateObjectHydration = templateObjectHydration ? templateObjectHydration : null;
-
-        /**
-         * @type {object}
-         */
-        this.valueStrategies = valueStrategies ? valueStrategies : {};
-
-        /**
-         * @type {object}
-         */
-        this.propertyStrategies = propertyStrategies ? propertyStrategies : {};
-    }
-
-    /**
      * @param {object} data
      * @param {object} object
      */
@@ -139,12 +116,20 @@ export abstract class AbstractHydrator implements HydratorInteface {
     /**
      * @return {object}
      */
-    protected getTemplateObjectHydration() {
+    public getTemplateObjectHydration() {
         let obj = {};
         if (this.templateObjectHydration !== null) {
             obj = new this.templateObjectHydration.constructor();
         }
         return obj;
+    }
+
+    /**
+     * @return {object}
+     */
+    public setTemplateObjectHydration(templateObjectHydration: any) {
+        this.templateObjectHydration = templateObjectHydration;
+        return this;
     }
 
     /**

@@ -45,3 +45,4 @@ export class Localize extends EventManagerAware {
     }
 }
 Localize.CHANGE_LANGUAGE = 'change-language';
+//# sourceMappingURL=Localize.js.map

@@ -22,18 +22,22 @@ export class Application {
      * @param {ContainerInterface} container
      */
     loadModules(modules, container) {
+        let promises = [];
         for (let cont = 0; modules.length > cont; cont++) {
-            this.loadModule(modules[cont], container);
-            this.modules.push(modules[cont]);
+            promises.push(this._loadModule(modules[cont], container));
         }
-        this.getEventManager().emit(Application.BOOTSTRAP_MODULE, modules);
-        let l = require('path');
-        l.no;
+        Promise.all(promises).then((modules) => {
+            this.modules = modules;
+            this.getEventManager().emit(Application.BOOTSTRAP_MODULE, modules);
+        });
     }
     /**
      * @param {Module} module
+     * @param {ContainerInterface} container
+     * @return {Promise<Module>}
+     * @private
      */
-    loadModule(module, container) {
+    async _loadModule(module, container) {
         /**
          * to run absolute path on windows, for polymer cli script c:/ !== /c:/ when use import
          */
@@ -47,7 +51,7 @@ export class Application {
          */
         if (module.getWebComponentEntryPointName() && customElements && customElements.get(module.getWebComponentEntryPointName()) === undefined) {
             let wcEntryPoint = `${modulePath}${module.getName()}${this.getSlash()}${module.getWebComponentEntryPointNameFile()}`;
-            import(wcEntryPoint)
+            await import(wcEntryPoint)
                 .then((moduleLoaded) => {
                 console.log("Load entry point module:", module.getWebComponentEntryPointName(), module);
             })
@@ -69,8 +73,9 @@ export class Application {
             /**
              * Init module
              */
-            configModuleClass.init();
+            await configModuleClass.init();
         }
+        return module;
     }
     /**
      * @return {string}
@@ -118,15 +123,7 @@ export class Application {
      * @return {string}
      */
     getSlash() {
-        return this.slash;
-    }
-    /**
-     * @param {string} slash
-     * @return {Application}
-     */
-    setSlash(slash) {
-        this.slash = slash;
-        return this;
+        return this.path.sep;
     }
     /**
      * @param {Module} module
@@ -154,12 +151,6 @@ export class Application {
         return this;
     }
     /**
-     * @param {ContainerInterface} container
-     */
-    static injectService(container) {
-        console.log('inject');
-    }
-    /**
      * @param {EventManagerInterface} eventManager
      * @return {this}
      */
@@ -182,3 +173,4 @@ Application.BOOTSTRAP_MODULE = 'bootstrap-module';
  * @type {string}
  */
 Application.LOAD_MODULE = 'laod-module';
+//# sourceMappingURL=Application.js.map

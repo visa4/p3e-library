@@ -10,7 +10,7 @@ export class EventManagerAware implements EventManagerAwareInterface {
     /**
      * @type {EventManager}
      */
-    private eventManager:EventManagerInterface = new EventManager();
+    protected eventManager:EventManagerInterface = new EventManager();
 
     /**
      * @param {EventManagerInterface} eventManager

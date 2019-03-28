@@ -32,3 +32,4 @@ export class Event {
         return this.stopPropagation;
     }
 }
+//# sourceMappingURL=Event.js.map

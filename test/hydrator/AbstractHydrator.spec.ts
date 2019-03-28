@@ -66,28 +66,6 @@ describe('AbstractHydrator', () => {
 
     });
 
-    it('TemplateObject', () => {
-        let hydrator;
-        hydrator = new MockHydrator();
-
-        expect(hydrator.getTemplateObjectHydration()).to.be.a('object');
-
-        let hydrator1;
-
-        class MockClass {
-            public test:string;
-            constructor() {
-                this.test = "test";
-            }
-        };
-
-        let mock = new MockClass();
-
-        hydrator1 = new MockHydrator(mock);
-        expect(hydrator1.getTemplateObjectHydration()).to.not.equal(mock);
-        expect(hydrator1.getTemplateObjectHydration()).to.instanceOf(MockClass);
-    });
-
     it('Hydrate and extract value', () => {
         let hydrator;
         hydrator = new MockHydrator();
@@ -99,7 +77,7 @@ describe('AbstractHydrator', () => {
         expect(hydrator.hydrateValue('test', mockData)).to.be.equal(mockData);
 
         let mockStrategy = <ValueStrategyInteface>{};
-        mockStrategy.extractValue = (name, data) => {
+        mockStrategy.extractValue = (name) => {
             return mockDataI;
         };
         mockStrategy.hydrateValue = (name, data) => {

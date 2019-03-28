@@ -6,6 +6,26 @@ const AbstractHydrator_1 = require("./AbstractHydrator");
  */
 class PropertyHydrator extends AbstractHydrator_1.AbstractHydrator {
     /**
+     * @param {object} templateObjectHydration
+     * @param {object} valueStrategies
+     * @param {object} propertyStrategies
+     */
+    constructor(templateObjectHydration, valueStrategies, propertyStrategies) {
+        super();
+        /**
+         * @type {object}
+         */
+        this.templateObjectHydration = templateObjectHydration ? templateObjectHydration : null;
+        /**
+         * @type {object}
+         */
+        this.valueStrategies = valueStrategies ? valueStrategies : {};
+        /**
+         * @type {object}
+         */
+        this.propertyStrategies = propertyStrategies ? propertyStrategies : {};
+    }
+    /**
      * @param {object} data
      */
     extract(data) {

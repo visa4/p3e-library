@@ -1,15 +1,9 @@
 /**
  *
  */
-export interface PropertyStrategyInterface {
+import {PropertyHydrationStrategyInterface} from "./PropertyHydrationStrategyInterface";
+import {PropertyExtractStrategyInterface} from "./PropertyExtractStrategyInterface";
 
-    /**
-     * @param {string} property
-     */
-    hydrateProperty(property:string);
+export interface PropertyStrategyInterface extends PropertyExtractStrategyInterface, PropertyHydrationStrategyInterface{
 
-    /**
-     * @param {string} property
-     */
-    extractProperty(property:string);
 }

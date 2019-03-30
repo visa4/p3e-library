@@ -36,11 +36,6 @@ export class Application implements EventManagerAwareInterface {
     private modulePath: string;
 
     /**
-     * @type {string}
-     */
-    private slash: string;
-
-    /**
      * @type {Array<Module>}
      */
     private modules: Array<Module> = [];
@@ -59,19 +54,13 @@ export class Application implements EventManagerAwareInterface {
      * @param {Array<Module>} modules
      * @param {ContainerInterface} container
      */
-    public loadModules(modules:Array<Module>, container:ContainerInterface) {
+    public async loadModules(modules:Array<Module>, container:ContainerInterface) {
 
-        let promises = [];
         for (let cont = 0; modules.length > cont; cont++) {
-            promises.push(this._loadModule(modules[cont], container));
+           this.modules.push(await this._loadModule(modules[cont], container));
         }
-
-        Promise.all(promises).then(
-            (modules) => {
-                this.modules= modules;
-                this.getEventManager().emit(Application.BOOTSTRAP_MODULE, modules);
-        });
-
+        this.getEventManager().emit(Application.BOOTSTRAP_MODULE, this.modules);
+        return this.modules;
     }
 
     /**
@@ -91,20 +80,23 @@ export class Application implements EventManagerAwareInterface {
         let configModule;
         let configModuleClass;
         let autoloadRequire;
+        let wcEntryPoint;
+        let wcComponent;
 
+        console.group(`Load Module ${module.getName()}`);
         /**
          * Load entry point module
          */
         if (module.getWebComponentEntryPointName() && customElements && customElements.get(module.getWebComponentEntryPointName()) === undefined) {
 
-            let wcEntryPoint = `${modulePath}${module.getName()}${this.getSlash()}${module.getWebComponentEntryPointNameFile()}`;
+            wcEntryPoint = `${modulePath}${module.getName()}${this.getSlash()}${module.getWebComponentEntryPointNameFile()}`;
             await import(wcEntryPoint)
                 .then((moduleLoaded) => {
-                    console.log("Load entry point module:", module.getWebComponentEntryPointName(), module);
+                    console.log(`Load entry point module "${module.getWebComponentEntryPointName()}" store in ${wcEntryPoint}`);
 
                 })
                 .catch((err) => {
-                    console.log("Failed to load entry point module:", err);
+                    console.error(`Failed to load entry point module store in ${wcEntryPoint}`);
                 });
         }
 
@@ -117,12 +109,29 @@ export class Application implements EventManagerAwareInterface {
             }
         }
 
+        if (module.getAutoloadsWs().length > 0) {
+
+            for (let cont = 0; module.getAutoloadsWs().length > cont; cont++) {
+
+                wcComponent = `${modulePath}${module.getName()}${this.getSlash()}${this.path.normalize(module.getAutoloadsWs()[cont])}`;
+                await import(wcComponent)
+                    .then((moduleLoaded) => {
+                        console.log(`Load web component store in "${wcComponent}"`);
+
+                    })
+                    .catch((err) => {
+                        console.error(`Failed to load autoloads store in ${wcComponent}`);
+                    });
+            }
+        }
+
         if (module.getConfigEntryPoint()) {
             let configModulePath = `${this.getModulePath()}${module.getName()}${this.getSlash()}${this.path.normalize(module.getConfigEntryPoint())}`;
 
 
             configModule  = require(configModulePath);
             configModuleClass = new configModule();
+            window[configModuleClass.constructor.name] = configModule;
             configModuleClass.setContainer(container);
             /**
              * Init module
@@ -130,6 +139,7 @@ export class Application implements EventManagerAwareInterface {
             await configModuleClass.init();
         }
 
+        console.groupEnd();
         return module;
     }
 

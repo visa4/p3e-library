@@ -193,7 +193,7 @@ export abstract class AbstractHydrator implements HydratorInteface {
     protected extractValue(name:string, data: any) {
         let extractValue = data;
         if (this.hasValueStrategy(name)) {
-            extractValue = this.getValueStrategy(name).extractValue(name, data);
+            extractValue = this.getValueStrategy(name).extractValue(data);
         }
         return extractValue;
     }

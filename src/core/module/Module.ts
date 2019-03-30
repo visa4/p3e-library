@@ -46,7 +46,7 @@ export class Module {
     /**
      * @type Array<string>
      */
-    private autoloadWs: Array<string> = [];
+    private autoloadsWs: Array<string> = [];
 
     /**
      * @return {string}
@@ -153,7 +153,21 @@ export class Module {
 
     /**
      */
-    public setAutoloads(value: Array<string>) {
-        this.autoloads = value;
+    public setAutoloads(autoloads: Array<string>) {
+        this.autoloads = autoloads;
+    }
+
+    /**
+     * @return {Array<string>}
+     */
+    public getAutoloadsWs() {
+        return this.autoloadsWs;
+    }
+
+    /**
+     * @param {Array<string>} autoloadsWs
+     */
+    public setAutoloadsWs(autoloadsWs: Array<string>) {
+        this.autoloadsWs = autoloadsWs;
     }
 }

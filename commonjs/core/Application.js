@@ -32,13 +32,12 @@ class Application {
      * @param {ContainerInterface} container
      */
     loadModules(modules, container) {
-        let promises = [];
-        for (let cont = 0; modules.length > cont; cont++) {
-            promises.push(this._loadModule(modules[cont], container));
-        }
-        Promise.all(promises).then((modules) => {
-            this.modules = modules;
-            this.getEventManager().emit(Application.BOOTSTRAP_MODULE, modules);
+        return __awaiter(this, void 0, void 0, function* () {
+            for (let cont = 0; modules.length > cont; cont++) {
+                this.modules.push(yield this._loadModule(modules[cont], container));
+            }
+            this.getEventManager().emit(Application.BOOTSTRAP_MODULE, this.modules);
+            return this.modules;
         });
     }
     /**
@@ -57,16 +56,19 @@ class Application {
             let configModule;
             let configModuleClass;
             let autoloadRequire;
+            let wcEntryPoint;
+            let wcComponent;
+            console.group(`Load Module ${module.getName()}`);
             /**
              * Load entry point module
              */
             if (module.getWebComponentEntryPointName() && customElements && customElements.get(module.getWebComponentEntryPointName()) === undefined) {
-                let wcEntryPoint = `${modulePath}${module.getName()}${this.getSlash()}${module.getWebComponentEntryPointNameFile()}`;
+                wcEntryPoint = `${modulePath}${module.getName()}${this.getSlash()}${module.getWebComponentEntryPointNameFile()}`;
                 yield Promise.resolve().then(() => require(wcEntryPoint)).then((moduleLoaded) => {
-                    console.log("Load entry point module:", module.getWebComponentEntryPointName(), module);
+                    console.log(`Load entry point module "${module.getWebComponentEntryPointName()}" store in ${wcEntryPoint}`);
                 })
                     .catch((err) => {
-                    console.log("Failed to load entry point module:", err);
+                    console.error(`Failed to load entry point module store in ${wcEntryPoint}`);
                 });
             }
             if (module.getAutoloads().length > 0) {
@@ -75,16 +77,29 @@ class Application {
                     window[autoloadRequire.name] = autoloadRequire;
                 }
             }
+            if (module.getAutoloadsWs().length > 0) {
+                for (let cont = 0; module.getAutoloadsWs().length > cont; cont++) {
+                    wcComponent = `${modulePath}${module.getName()}${this.getSlash()}${this.path.normalize(module.getAutoloadsWs()[cont])}`;
+                    yield Promise.resolve().then(() => require(wcComponent)).then((moduleLoaded) => {
+                        console.log(`Load web component store in "${wcComponent}"`);
+                    })
+                        .catch((err) => {
+                        console.error(`Failed to load autoloads store in ${wcComponent}`);
+                    });
+                }
+            }
             if (module.getConfigEntryPoint()) {
                 let configModulePath = `${this.getModulePath()}${module.getName()}${this.getSlash()}${this.path.normalize(module.getConfigEntryPoint())}`;
                 configModule = require(configModulePath);
                 configModuleClass = new configModule();
+                window[configModuleClass.constructor.name] = configModule;
                 configModuleClass.setContainer(container);
                 /**
                  * Init module
                  */
                 yield configModuleClass.init();
             }
+            console.groupEnd();
             return module;
         });
     }

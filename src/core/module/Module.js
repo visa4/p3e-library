@@ -38,7 +38,7 @@ export class Module {
         /**
          * @type Array<string>
          */
-        this.autoloadWs = [];
+        this.autoloadsWs = [];
     }
     /**
      * @return {string}
@@ -132,8 +132,20 @@ export class Module {
     }
     /**
      */
-    setAutoloads(value) {
-        this.autoloads = value;
+    setAutoloads(autoloads) {
+        this.autoloads = autoloads;
+    }
+    /**
+     * @return {Array<string>}
+     */
+    getAutoloadsWs() {
+        return this.autoloadsWs;
+    }
+    /**
+     * @param {Array<string>} autoloadsWs
+     */
+    setAutoloadsWs(autoloadsWs) {
+        this.autoloadsWs = autoloadsWs;
     }
 }
 //# sourceMappingURL=Module.js.map

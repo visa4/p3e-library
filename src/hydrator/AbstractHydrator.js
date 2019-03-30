@@ -156,7 +156,7 @@ export class AbstractHydrator {
     extractValue(name, data) {
         let extractValue = data;
         if (this.hasValueStrategy(name)) {
-            extractValue = this.getValueStrategy(name).extractValue(name, data);
+            extractValue = this.getValueStrategy(name).extractValue(data);
         }
         return extractValue;
     }

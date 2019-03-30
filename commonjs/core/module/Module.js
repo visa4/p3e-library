@@ -40,7 +40,7 @@ class Module {
         /**
          * @type Array<string>
          */
-        this.autoloadWs = [];
+        this.autoloadsWs = [];
     }
     /**
      * @return {string}
@@ -134,8 +134,20 @@ class Module {
     }
     /**
      */
-    setAutoloads(value) {
-        this.autoloads = value;
+    setAutoloads(autoloads) {
+        this.autoloads = autoloads;
+    }
+    /**
+     * @return {Array<string>}
+     */
+    getAutoloadsWs() {
+        return this.autoloadsWs;
+    }
+    /**
+     * @param {Array<string>} autoloadsWs
+     */
+    setAutoloadsWs(autoloadsWs) {
+        this.autoloadsWs = autoloadsWs;
     }
 }
 exports.Module = Module;

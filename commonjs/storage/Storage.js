@@ -102,7 +102,7 @@ class Storage {
     /**
      * @inheritDoc
      */
-    remove(entity) {
+    delete(entity) {
         return new Promise((resolve, reject) => {
             this.getEventManager().emit(Storage.BEFORE_REMOVE, entity);
             this.adapter.remove(entity)

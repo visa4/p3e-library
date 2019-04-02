@@ -148,7 +148,7 @@ export class Storage implements HydratorAwareInterface, EventManagerAwareInterfa
     /**
      * @inheritDoc
      */
-    remove(entity: EntityIdentifierInterface): Promise<any> {
+    delete(entity: EntityIdentifierInterface): Promise<any> {
         return new Promise((resolve, reject) => {
             this.getEventManager().emit(Storage.BEFORE_REMOVE, entity);
             this.adapter.remove(entity)

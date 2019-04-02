@@ -42,6 +42,9 @@ module.exports = {
         },
         entity : {
             EntityIdentifier : require('./commonjs/storage/entity/EntityIdentifier').EntityIdentifier
+        },
+        util : {
+            MongoIdGenerator : require('./commonjs/storage/util/MongoIdGenerator').MongoIdGenerator
         }
     }
 };

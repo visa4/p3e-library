@@ -26,7 +26,7 @@ export interface StorageInterface {
      * @param {EntityIdentifierInterface} entity
      * @return {Promise<any>}
      */
-    remove(entity: EntityIdentifierInterface) : Promise<any>;
+    delete(entity: EntityIdentifierInterface) : Promise<any>;
 
     /**
      * @param {object} filter

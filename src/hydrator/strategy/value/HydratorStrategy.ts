@@ -12,7 +12,6 @@ export class HydratorStrategy extends HydratorAware implements ValueStrategyInte
      */
     extractValue(data: any) {
         let extract = [];
-        console.log('extract',data);
         if (Array.isArray(data)) {
             for (let cont = 0; data.length > cont; cont++) {
                 extract[cont] = this.getHydrator().extract(data[cont]);

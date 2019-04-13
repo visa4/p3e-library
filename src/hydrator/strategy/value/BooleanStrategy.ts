@@ -1,42 +1,49 @@
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
+import {ValueStrategyInteface} from "./ValueStrategyInteface";
+
 /**
  *
  */
-class NumberStrategy {
+export class BooleanStrategy implements ValueStrategyInteface {
+
     /**
      * @param {string} property
      * @param data
      * @return {any}
      */
-    hydrateValue(property, data) {
+    hydrateValue(property: string, data: any) {
+
+
         let hydrate = data;
+
         switch (typeof data) {
             case 'string':
-                hydrate = parseFloat(data);
+                hydrate = data.length > 0 ? true : false;
                 break;
-            case 'boolean':
-                hydrate = data ? 1 : 0;
+            case 'number':
+                hydrate = data > 0 ? true : false;
                 break;
         }
+
         return hydrate;
     }
+
     /**
      *
      * @param data
      * @returns {{}|*}
      */
-    extractValue(data) {
+    extractValue(data: any) {
         let extract = data;
+
         switch (typeof data) {
             case 'string':
-                extract = parseFloat(data);
+                extract = data.length > 0 ? true : false;
                 break;
-            case 'boolean':
-                extract = data ? 1 : 0;
+            case 'number':
+                extract = data > 0 ? true : false;
                 break;
         }
+
         return extract;
     }
 }
-exports.NumberStrategy = NumberStrategy;

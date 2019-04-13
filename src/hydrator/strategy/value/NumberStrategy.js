@@ -3,13 +3,12 @@
  */
 export class NumberStrategy {
     /**
-     *
+     * @param {string} property
      * @param data
-     * @returns {*}
+     * @return {any}
      */
-    hydrateValue(data) {
+    hydrateValue(property, data) {
         let hydrate = data;
-        // TODO complete other type
         switch (typeof data) {
             case 'string':
                 hydrate = parseFloat(data);
@@ -23,11 +22,10 @@ export class NumberStrategy {
     /**
      *
      * @param data
-     * @returns {*}
+     * @returns {{}|*}
      */
     extractValue(data) {
         let extract = data;
-        // TODO complete other type
         switch (typeof data) {
             case 'string':
                 extract = parseFloat(data);

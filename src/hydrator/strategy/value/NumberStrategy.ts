@@ -1,18 +1,20 @@
 import {ValueStrategyInteface} from "./ValueStrategyInteface";
+
 /**
  *
  */
 export class NumberStrategy implements ValueStrategyInteface {
 
     /**
-     *
+     * @param {string} property
      * @param data
-     * @returns {*}
+     * @return {any}
      */
-    hydrateValue(data: any) {
+    hydrateValue(property: string, data: any) {
+
 
         let hydrate = data;
-        // TODO complete other type
+
         switch (typeof data) {
             case 'string':
                 hydrate = parseFloat(data);
@@ -28,11 +30,11 @@ export class NumberStrategy implements ValueStrategyInteface {
     /**
      *
      * @param data
-     * @returns {*}
+     * @returns {{}|*}
      */
-    extractValue(data) {
+    extractValue(data: any) {
         let extract = data;
-        // TODO complete other type
+
         switch (typeof data) {
             case 'string':
                 extract = parseFloat(data);

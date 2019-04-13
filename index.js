@@ -22,11 +22,17 @@ module.exports = {
         strategy : {
             value : {
                 HydratorStrategy : require('./commonjs/hydrator/strategy/value/HydratorStrategy').HydratorStrategy,
+                HybridStrategy : require('./commonjs/hydrator/strategy/value/HybridStrategy').HybridStrategy,
+                NumberStrategy : require('./commonjs/hydrator/strategy/value/NumberStrategy').NumberStrategy,
             }
         }
     },
     localize : {
         Localize : require('./commonjs/localize/Localize').Localize
+    },
+    sender : {
+        ProxyIpc : require('./commonjs/sender/ProxyIpc').ProxyIpc,
+        AbstractSender : require('./commonjs/sender/AbstractSender').AbstractSender
     },
     storage : {
         Storage : require('./commonjs/storage/Storage').Storage,

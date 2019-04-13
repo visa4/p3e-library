@@ -1,9 +1,7 @@
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
 /**
  *
  */
-class NumberStrategy {
+export class BooleanStrategy {
     /**
      * @param {string} property
      * @param data
@@ -13,10 +11,10 @@ class NumberStrategy {
         let hydrate = data;
         switch (typeof data) {
             case 'string':
-                hydrate = parseFloat(data);
+                hydrate = data.length > 0 ? true : false;
                 break;
-            case 'boolean':
-                hydrate = data ? 1 : 0;
+            case 'number':
+                hydrate = data > 0 ? true : false;
                 break;
         }
         return hydrate;
@@ -30,13 +28,13 @@ class NumberStrategy {
         let extract = data;
         switch (typeof data) {
             case 'string':
-                extract = parseFloat(data);
+                extract = data.length > 0 ? true : false;
                 break;
-            case 'boolean':
-                extract = data ? 1 : 0;
+            case 'number':
+                extract = data > 0 ? true : false;
                 break;
         }
         return extract;
     }
 }
-exports.NumberStrategy = NumberStrategy;
+//# sourceMappingURL=BooleanStrategy.js.map

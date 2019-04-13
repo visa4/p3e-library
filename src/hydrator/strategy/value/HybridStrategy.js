@@ -17,11 +17,11 @@ export class HybridStrategy {
         this.extractType = extractType;
     }
     /**
-     *
+     * @param {string} property
      * @param data
-     * @returns {*}
+     * @return {any}
      */
-    hydrateValue(data) {
+    hydrateValue(property, data) {
         return this.convertTo(this.hydrateType, data);
     }
     /**

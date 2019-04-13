@@ -62,11 +62,11 @@ export class HybridStrategy implements ValueStrategyInteface {
     }
 
     /**
-     *
+     * @param {string} property
      * @param data
-     * @returns {*}
+     * @return {any}
      */
-    hydrateValue(data: any) {
+    hydrateValue(property: string, data: any) {
 
         return this.convertTo(this.hydrateType, data);
     }
@@ -76,7 +76,7 @@ export class HybridStrategy implements ValueStrategyInteface {
      * @param data
      * @returns {*}
      */
-    extractValue(data) {
+    extractValue(data: any) {
         return this.convertTo(this.extractType, data);
     }
 

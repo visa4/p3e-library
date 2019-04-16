@@ -16,7 +16,7 @@ export class Storage implements HydratorAwareInterface, EventManagerAwareInterfa
      */
     public static BEFORE_SAVE = "after-save";
 
-    public static POST_SAVE = "after-save";
+    public static POST_SAVE = "post-save";
 
     public static BEFORE_UPDATE = "after-update";
 

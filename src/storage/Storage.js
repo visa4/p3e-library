@@ -158,7 +158,7 @@ export class Storage {
  * Constants
  */
 Storage.BEFORE_SAVE = "after-save";
-Storage.POST_SAVE = "after-save";
+Storage.POST_SAVE = "post-save";
 Storage.BEFORE_UPDATE = "after-update";
 Storage.POST_UPDATE = "post-update";
 Storage.BEFORE_REMOVE = "after-remove";

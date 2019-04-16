@@ -19,6 +19,7 @@ module.exports = {
     hydrator : {
         AbstractHydrator: require('./commonjs/hydrator/AbstractHydrator').AbstractHydrator,
         PropertyHydrator: require('./commonjs/hydrator/PropertyHydrator').PropertyHydrator,
+        AggregatePropertyHydrator: require('./commonjs/hydrator/AggregatePropertyHydrator').AggregatePropertyHydrator,
         strategy : {
             value : {
                 HydratorStrategy : require('./commonjs/hydrator/strategy/value/HydratorStrategy').HydratorStrategy,
@@ -27,8 +28,14 @@ module.exports = {
             }
         }
     },
+    fs : {
+        Fs: require('./commonjs/fs/Fs').Fs
+    },
     localize : {
         Localize : require('./commonjs/localize/Localize').Localize
+    },
+    path : {
+        Path : require('./commonjs/path/Path').Path,
     },
     sender : {
         ProxyIpc : require('./commonjs/sender/ProxyIpc').ProxyIpc,

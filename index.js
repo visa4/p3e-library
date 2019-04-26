@@ -54,7 +54,9 @@ module.exports = {
             }
         },
         entity : {
-            EntityIdentifier : require('./commonjs/storage/entity/EntityIdentifier').EntityIdentifier
+            EntityIdentifier : require('./commonjs/storage/entity/EntityIdentifier').EntityIdentifier,
+            EntityNestedReference : require('./commonjs/storage/entity/EntityNestedReference').EntityNestedReference,
+            EntityReference : require('./commonjs/storage/entity/EntityReference').EntityReference
         },
         util : {
             MongoIdGenerator : require('./commonjs/storage/util/MongoIdGenerator').MongoIdGenerator

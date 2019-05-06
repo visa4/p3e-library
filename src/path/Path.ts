@@ -18,28 +18,10 @@ export class Path {
      */
     protected extension:string = '';
 
-
     /**
-     * @param path
+     * @type {path}
      */
-    constructor(path) {
-
-        if (!path) {
-            return;
-        }
-
-        let nodePath = require('path');
-        let extName = nodePath.extname(path);
-        let directory = nodePath.basename(path);
-
-        directory = directory ? directory + nodePath.sep : '';
-
-        this.nameFile = nodePath.basename(path, extName);
-
-        this.extension = extName.replace('.', '');
-
-        this.directory = directory;
-    }
+    private _pathNode:any = require('path');
 
     /**
      * @return {string}
@@ -50,6 +32,17 @@ export class Path {
             file = `${this.nameFile}.${this.extension}`;
         }
 
-        return `${this.directory}${file}`;
+        let path = (this.directory.length) ? `${this.directory}${this._pathNode.sep}`: '';
+
+        return `${path}${file}`;
+    }
+
+    /**
+     * @return {boolean}
+     */
+    public isAbsolute() {
+
+        let path = (this.directory.length) ? `${this.directory}${this._pathNode.sep}`: '';
+        return this._pathNode.isAbsolute(`${path}${this.nameFile}.${this.extension}`);
     }
 }

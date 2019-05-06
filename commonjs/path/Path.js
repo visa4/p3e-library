@@ -4,10 +4,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
  *
  */
 class Path {
-    /**
-     * @param path
-     */
-    constructor(path) {
+    constructor() {
         /**
          * @type {string}
          */
@@ -20,16 +17,10 @@ class Path {
          * @type {string}
          */
         this.extension = '';
-        if (!path) {
-            return;
-        }
-        let nodePath = require('path');
-        let extName = nodePath.extname(path);
-        let directory = nodePath.basename(path);
-        directory = directory ? directory + nodePath.sep : '';
-        this.nameFile = nodePath.basename(path, extName);
-        this.extension = extName.replace('.', '');
-        this.directory = directory;
+        /**
+         * @type {path}
+         */
+        this._pathNode = require('path');
     }
     /**
      * @return {string}
@@ -39,7 +30,15 @@ class Path {
         if (this.nameFile && this.extension) {
             file = `${this.nameFile}.${this.extension}`;
         }
-        return `${this.directory}${file}`;
+        let path = (this.directory.length) ? `${this.directory}${this._pathNode.sep}` : '';
+        return `${path}${file}`;
+    }
+    /**
+     * @return {boolean}
+     */
+    isAbsolute() {
+        let path = (this.directory.length) ? `${this.directory}${this._pathNode.sep}` : '';
+        return this._pathNode.isAbsolute(`${path}${this.nameFile}.${this.extension}`);
     }
 }
 exports.Path = Path;
